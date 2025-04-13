@@ -1,0 +1,37 @@
+
+
+--CREATE DATABASE shop;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+DROP TABLE IF EXISTS t_orders;
+
+DROP TABLE IF EXISTS  t_products;
+
+CREATE TABLE t_products(
+ id text PRIMARY KEY DEFAULT uuid_generate_v4(),
+ name TEXT,
+ quantity int,
+ created_at timestamptz NOT NULL,
+ created_by TEXT NOT NULL,
+ updated_at timestamptz NOT NULL,
+ updated_by TEXT NOT null,
+ deleted_at timestamptz,
+  VERSION int NOT NULL
+);
+
+CREATE TABLE t_orders(
+ id text PRIMARY KEY DEFAULT uuid_generate_v4(),
+ product_id text NOT NULL,
+ trx_number TEXT NOT null,
+ trx_date date NOT null,
+ quantity int,
+ created_at timestamptz NOT NULL,
+ created_by TEXT NOT null,
+ updated_at timestamptz NOT NULL,
+ updated_by TEXT NOT null,
+ deleted_at timestamptz,
+ status TEXT,
+ VERSION int NOT NULL,
+   CONSTRAINT fk_product
+      FOREIGN KEY(product_id)
+        REFERENCES t_products(id)
+);
