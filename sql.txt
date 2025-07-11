@@ -1,10 +1,20 @@
-
-
 --CREATE DATABASE shop;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 DROP TABLE IF EXISTS t_orders;
 
 DROP TABLE IF EXISTS  t_products;
+
+CREATE TABLE t_users (
+ id text PRIMARY KEY DEFAULT uuid_generate_v4(),
+ name TEXT,
+ quantity int,
+ created_at timestamptz NOT NULL,
+ created_by TEXT NOT NULL,
+ updated_at timestamptz NOT NULL,
+ updated_by TEXT NOT null,
+ deleted_at timestamptz,
+  VERSION int NOT NULL
+);
 
 CREATE TABLE t_products(
  id text PRIMARY KEY DEFAULT uuid_generate_v4(),

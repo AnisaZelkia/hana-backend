@@ -61,5 +61,20 @@ public class User extends AuditableEntity implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
+	
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+	
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+	
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
 
 }

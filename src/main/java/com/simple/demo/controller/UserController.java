@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.simple.demo.dto.ResponseData;
-import com.simple.demo.persistence.entity.User;
+import com.simple.demo.dto.request.CreateUserRequestDto;
 import com.simple.demo.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -18,12 +18,11 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("api/users")
 @RequiredArgsConstructor
 public class UserController {
-
 	private final UserService userService;
 
 	@PostMapping
-	public ResponseEntity<ResponseData<UserDetails>> registration(@RequestBody User user) {
-		UserDetails userDetails = userService.register(user);
+	public ResponseEntity<ResponseData<UserDetails>> registration(@RequestBody CreateUserRequestDto request) {
+		UserDetails userDetails = userService.register(request);
 		ResponseData<UserDetails> responseData = new ResponseData<>("User registered successfully", userDetails,
 				HttpStatus.OK.value());
 		return ResponseEntity.ok(responseData);
