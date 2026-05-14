@@ -1,16 +1,15 @@
-package com.simple.demo.dto;
+package com.simple.demo.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseData<T> {
-	private String message;
-	private T data;
-	private int status;
+public class LoginRequestDto {
+	private String email;
+	private String password;
 }

@@ -8,7 +8,6 @@ import com.simple.demo.persistence.entity.User;
 
 public interface UserRepository extends JpaRepository<User, String> {
 	boolean existsByEmail(String email);
-
-	/** Use Drive Name Query */
+	
 	Optional<User> findByEmail(String email);
 }

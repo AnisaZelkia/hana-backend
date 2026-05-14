@@ -1,7 +1,6 @@
 package com.simple.demo.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -13,12 +12,13 @@ import com.simple.demo.persistence.entity.Product;
 import com.simple.demo.persistence.repository.ProductRepository;
 
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ProductService {
-	private final ProductRepository repo;
+
+	private ProductRepository repo;
 
 	private void setEntity(Product entity, CreateProductRequestDto request) {
 		entity.setName(request.getName());
@@ -41,11 +41,8 @@ public class ProductService {
 	}
 
 	public Product getEntityById(String id) {
-		Optional<Product> product = repo.findById(id);
-		if (product.isEmpty()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product tidak ada");
-		}
-		return product.get();
+		return repo.findById(id)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product tidak ada"));
 	}
 
 	@Transactional
@@ -55,7 +52,7 @@ public class ProductService {
 
 	@Transactional
 	public void deleteByIds(List<String> ids) {
-		ids.stream().forEach(this::deleteById);
+		repo.deleteAllById(ids);
 	}
 
 	public List<Product> getAll() {

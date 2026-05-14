@@ -22,7 +22,7 @@ import lombok.Setter;
 @Table(name = "t_users")
 @Setter
 @Getter
-@SQLRestriction("deleted_at <> null")
+@SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE t_users SET deleted_at = now() WHERE id=? AND version =?")
 public class User extends AuditableEntity implements UserDetails {
@@ -32,11 +32,11 @@ public class User extends AuditableEntity implements UserDetails {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name="fullname", unique = true)
+	@Column(name="fullname")
 	private String fullname;
 	@Column(name="email", unique = true)
 	private String email;
-	@Column(name="password", unique = true)
+	@Column(name="password")
 	private String password;
 	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
