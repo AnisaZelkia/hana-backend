@@ -9,10 +9,9 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class CreateOrderRequestDto {
-	private String productId;
-	private String trxNumber;
-	private Integer quantity;
-	private String status;
+public class UpdateBalanceRequestDto extends CreateBalanceRequestDto{
+	private String id ;
+	private int version;
+
 
 }

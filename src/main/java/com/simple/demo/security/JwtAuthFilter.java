@@ -7,8 +7,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.simple.demo.service.JwtService;
-
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,18 +27,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		System.out.println("🔥 JWT FILTER MASUK");
-
 		String header = request.getHeader("Authorization");
 
 		if (header == null || !header.startsWith("Bearer ")) {
 			try {
 				filterChain.doFilter(request, response);
-			} catch (java.io.IOException e) {
+			} catch (java.io.IOException | ServletException e) {
 				e.printStackTrace();
-			} catch (ServletException e) {
-				e.printStackTrace();
-			}
+			} 
 			return;
 		}
 
@@ -59,12 +53,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 				SecurityContextHolder.getContext().setAuthentication(auth);
 			}
 		}
-
 		try {
 			filterChain.doFilter(request, response);
-		} catch (java.io.IOException e) {
-			e.printStackTrace();
-		} catch (ServletException e) {
+		} catch (java.io.IOException | ServletException e) {
 			e.printStackTrace();
 		}
 	}

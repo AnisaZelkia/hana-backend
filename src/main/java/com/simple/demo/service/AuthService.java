@@ -10,7 +10,9 @@ import com.simple.demo.dto.response.LoginResponseDto;
 import com.simple.demo.mapper.UserMapper;
 import com.simple.demo.persistence.entity.User;
 import com.simple.demo.persistence.repository.UserRepository;
+import com.simple.demo.security.JwtService;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -21,20 +23,25 @@ public class AuthService {
 	private final BCryptPasswordEncoder bCrypt;
 	private final JwtService jwtService;
 	private final UserMapper mapper;
+	private final BalanceService balanceService;
 
+	@Transactional
 	public User register(CreateUserRequestDto request) {
-		boolean isExist =repo.existsByEmail(request.getEmail());
+		boolean isExist = repo.existsByEmail(request.getEmail());
 		if (isExist) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
 		}
+		request.setFullname(request.getFullname().toUpperCase());
 		User entity = mapper.toEntity(request);
 		entity.setPassword(bCrypt.encode(request.getPassword()));
-
-		return repo.save(entity);
+		User user = repo.save(entity);
+		balanceService.add(user);
+		return user;
 	}
 
 	public LoginResponseDto login(String email, String password) {
-		User user = repo.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+		User user = repo.findByEmail(email)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email or password"));
 		boolean isValid = bCrypt.matches(password, user.getPassword());
 		if (!isValid) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Password");
@@ -46,7 +53,8 @@ public class AuthService {
 	}
 
 	public Boolean isValidLogin(String email, String password) {
-		User user = repo.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+		User user = repo.findByEmail(email)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email or password"));
 		return bCrypt.matches(password, user.getPassword());
 	}
 }

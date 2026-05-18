@@ -1,4 +1,4 @@
-package com.simple.demo.service;
+package com.simple.demo.security;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -11,7 +11,7 @@ import java.util.Date;
 public class JwtService {
 
     private final Key key = Keys.hmacShaKeyFor(
-            "mysecretkeymysecretkeymysecretkey123456".getBytes()
+            "Hanasecrethanasecrethanasecrethanasecret1234".getBytes()
     );
 
     public String generateToken(String email) {
